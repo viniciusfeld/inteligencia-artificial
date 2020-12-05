@@ -1,0 +1,42 @@
+% Elementos Repetidos
+
+elem_repetidos([],[]).
+elem_repetidos([X|Xs0],Ys0) :-
+   partition(=(X),Xs0,Es,Xs),
+  (Es=[] -> Ys0=Ys; Ys0=[X|Ys]),
+   elem_repetidos(Xs,Ys).
+
+% Inserção Ordenada
+
+insercao_ord(X, [Y | L], [X, Y | L]) :- 
+    X =< Y,!.
+insercao_ord(X, [Y | L], [Y |Io]) :- 
+    X > Y,!,
+    insercao_ord(X, L, Io).
+insercao_ord(X, [], [X]).
+
+% Intercalada
+
+intercalada([], [], []).
+
+intercalada([A | As], [B | Bs], [A | ABs]):-
+    A=<B, intercalada(As, [B | Bs], ABs),
+    !.
+
+intercalada([A | As], [B | Bs], [B | ABs]):-
+    A >B, intercalada([A | As], Bs, ABs),
+    !.
+
+intercalada([], Bs, Bs).
+
+intercalada(As, [], As).
+
+% Ordenada
+
+ordenada(L, S):-
+	append(ORD, [A, B | Ls], L), 
+    B < A, %% tira A,B 
+	append(ORD, [B, A | Ls], Li), %% troca B,A
+    ordenada(Li, S),
+    !.
+ordenada(L, L).
